@@ -31,12 +31,20 @@ CTNode::CTNode(const std::shared_ptr<CTNode>& node) : debug_index(node->debug_in
 }
 
 void CTNode::SetConflict(const ConflictPtr& new_conflict) {
-	conflicts.push_back(new_conflict);
+	conflicts.emplace_back(new_conflict);
 }
 
 void CTNode::SetConstraint(const std::vector<ConstraintPtr> old_constraint_list, ConstraintPtr new_constraint) {
-	constraints.assign(old_constraint_list.begin(), old_constraint_list.end());
-	constraints.push_back(new_constraint);
+	// 浅拷贝应该也可以
+	// constraints.assign(old_constraint_list.begin(), old_constraint_list.end());
+	// constraints.emplace_back(new_constraint);
+
+	constraints.reserve(old_constraint_list.size());
+	for(const auto& constraint : constraints) {
+		auto temp_constraint = std::make_shared<Constraint>(constraint);
+		constraints.emplace_back(temp_constraint);
+	}
+	constraints.emplace_back(new_constraint);
 }
 
 void CTNode::SetSolution(const std::vector<PathPtr> &new_solution) {
@@ -164,12 +172,14 @@ bool HighLevelCBS::ValidatePathsInNode(CTNodePtr& node) {
 			CBS_EXCUTE_PLUS(dtp[k] == nullptr, std::cout << "dtp: " << k << "NULL!" << std::endl, continue);
 			
 			CBS_EXCUTE_PLUS(FLOAT_IN_RANGE(dtp[j]->t_start, dtp[k]->t_start), valid_solution = false, break);
+
 			if (!FLOAT_IN_RANGE(dtp[j]->t_start, dtp[k]->t_start) && dtp[k]->t_start < dtp[j]->t_end) {
 				CBS_EXCUTE_PLUS(dtp[j]->t_end - dtp[k]->t_start > handover_time, valid_solution = false, break);
 			} else {
 				std::cout << "CANT CLEAR CONFLICT!" << std::endl;
 			}
 		}
+
 		CBS_EXCUTE_PLUS(!valid_solution,
 			node->SetConflict(std::make_shared<Conflict>(agents[dtp[j + 1]->agent_index], agents[dtp[j]->agent_index], dtp[j + 1]->vertexSTgt, dtp[j]->t_end)),
 			return valid_solution);
@@ -256,7 +266,8 @@ void HighLevelCBS::RunCBS() {
 		    CTNodePtr new_ct_node = std::make_shared<CTNode>();		
 			ConstraintPtr new_constraint = std::make_shared<Constraint>(conflict[i]->agents[0], conflict[i]->vertex, conflict[i]->time_step);
 			new_ct_node->SetConstraint(P->GetConstraint(), new_constraint);
-		    new_ct_node->SetSolution(P->GetSolution());														
+		    new_ct_node->SetSolution(P->GetSolution());			
+
 			bool path_found = UpdateSolutionByInvokingLowLevel(new_ct_node);      
 			if (path_found) {
 				new_ct_node->SetDtp();
@@ -265,6 +276,7 @@ void HighLevelCBS::RunCBS() {
 		    } else {
 		    	std::cout << " PATH FOUND NONE!" << std::endl;
 		    }
+			
 		}
 	}
 

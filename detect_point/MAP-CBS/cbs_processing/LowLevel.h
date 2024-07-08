@@ -36,6 +36,8 @@ struct compppp {
 
 	bool extendTime(VertexPtr& start, std::vector<VertexPtr>& end_two, PathPtr& pathA, double extendtime);   //�ĳ�ֻ��ʱ����ص���������   Ч������
 	
+	bool GetPathOfAStar(bool& seek, VertexPtr& goal, VertexPtr& detect_point, PathPtr& path);
+
 	void ClearMapAStarValues();
 	
 	void FillNeighboors(VertexPtr& node, std::vector<VertexPtr>& successors, bool seek, const PathPtr& path, const std::vector<ConstraintPtr>& constraints);

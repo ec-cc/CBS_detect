@@ -12,6 +12,13 @@ void LowLevelCBS::pArrResize() {
 	}
 }
 
+bool LowLevelCBS::GetPathOfAStar(bool& seek, VertexPtr& goal, VertexPtr& detect_point, PathPtr& path) {
+	seek = false;
+	goal->parent = detect_point;
+	ReconstructPath(goal, path);
+	return true;
+}
+
 bool LowLevelCBS::AStar(VertexPtr& start, VertexPtr& goal, PathPtr& path, const std::vector<ConstraintPtr>& constraints) {
 	ClearMapAStarValues();
 	double dis = zc::detect::FuncCommon::Distance(*start, *goal);
@@ -59,22 +66,9 @@ bool LowLevelCBS::AStar(VertexPtr& start, VertexPtr& goal, PathPtr& path, const 
 					successors[i]->f = f;
 					map[width_index][length_index][angle_index] = successors[i];
 					openList.push(successors[i]);
-					if (h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT) {
-						if (constraints.empty()) {
-							seek = false;
-							goal->parent = successors[i];
-							ReconstructPath(goal, path);
-							return true;
-						} else if (constraints.back() != nullptr) {
-							if (successors[i]->total_time > constraints.back()->time_step - 10
-									&& successors[i]->total_time < constraints.back()->time_step + 10) {
-								seek = false;
-								goal->parent = successors[i];
-								ReconstructPath(goal, path);
-								return true;
-							}
-						}
-					}
+
+					CBS_EXCUTE(h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT, 
+						GetPathOfAStar(seek, goal, successors[i], path)); 	
 				}
 			} else if (!map[width_index][length_index][angle_index]) {
 				g_angle = abs(action_sample[i].changeA) / 360.0;                                                  //0628�޸�
@@ -89,44 +83,20 @@ bool LowLevelCBS::AStar(VertexPtr& start, VertexPtr& goal, PathPtr& path, const 
 				auto f = g + h;
 				map[width_index][length_index][angle_index] = successors[i];
 				openList.push(successors[i]);
-				if (h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT) {
-					if (constraints.empty()) {
-						seek = false;
-						goal->parent = successors[i];
-						ReconstructPath(goal, path);
-						return true;
-					} else if (constraints.back() != nullptr) {
-						if (successors[i]->total_time > constraints.back()->time_step - 10
-								&& successors[i]->total_time < constraints.back()->time_step + 10) {
-							seek = false;
-							goal->parent = successors[i];
-							ReconstructPath(goal, path);
-							return true;
-						}
-					}
-				}
+
+				CBS_EXCUTE(h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT, 
+					GetPathOfAStar(seek, goal, successors[i], path)); 
+
 			} else if (map[width_index][length_index][angle_index] && map[width_index][length_index][angle_index]->visited) {
 				auto diff = abs(zc::detect::FuncCommon::point_angle(successors[i]->x, successors[i]->y, goal->x, goal->y) - successors[i]->heading) > 180 ? 
 						360 - abs(zc::detect::FuncCommon::point_angle(successors[i]->x, successors[i]->y, goal->x, goal->y) - successors[i]->heading) : 
 							abs(zc::detect::FuncCommon::point_angle(successors[i]->x, successors[i]->y, goal->x, goal->y) - successors[i]->heading);
 				auto h_angle = zc::detect::FuncCommon::angle_standard(diff) / 360.0;
 				auto h_dis = zc::detect::FuncCommon::Distance(*successors[i], *goal) / dis;
-				if (h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT) {
-					if (constraints.empty()) {
-						seek = false;
-						goal->parent = successors[i];
-						ReconstructPath(goal, path);
-						return true;
-					} else if (constraints.back() != nullptr) {
-						if (successors[i]->total_time > constraints.back()->time_step - 10
-								&& successors[i]->total_time < constraints.back()->time_step + 10) {
-							seek = false;
-							goal->parent = successors[i];
-							ReconstructPath(goal, path);
-							return true;
-						}
-					}
-				}
+
+				CBS_EXCUTE(h_angle * 360 < AS_ANGLE_LIMIT && h_dis*dis < AS_DIS_LIMIT, 
+					GetPathOfAStar(seek, goal, successors[i], path)); 
+
 			} else {
 				std::cout << "ASTAR ERROR!!!" << std::endl;
 			}
