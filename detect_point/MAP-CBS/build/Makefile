@@ -123,6 +123,33 @@ main_cmake/fast:
 	$(MAKE) -f CMakeFiles/main_cmake.dir/build.make CMakeFiles/main_cmake.dir/build
 .PHONY : main_cmake/fast
 
+cbs_common/dubins.o: cbs_common/dubins.cpp.o
+
+.PHONY : cbs_common/dubins.o
+
+# target to build an object file
+cbs_common/dubins.cpp.o:
+	$(MAKE) -f CMakeFiles/main_cmake.dir/build.make CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o
+.PHONY : cbs_common/dubins.cpp.o
+
+cbs_common/dubins.i: cbs_common/dubins.cpp.i
+
+.PHONY : cbs_common/dubins.i
+
+# target to preprocess a source file
+cbs_common/dubins.cpp.i:
+	$(MAKE) -f CMakeFiles/main_cmake.dir/build.make CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.i
+.PHONY : cbs_common/dubins.cpp.i
+
+cbs_common/dubins.s: cbs_common/dubins.cpp.s
+
+.PHONY : cbs_common/dubins.s
+
+# target to generate assembly for a file
+cbs_common/dubins.cpp.s:
+	$(MAKE) -f CMakeFiles/main_cmake.dir/build.make CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.s
+.PHONY : cbs_common/dubins.cpp.s
+
 cbs_common/func_common.o: cbs_common/func_common.cpp.o
 
 .PHONY : cbs_common/func_common.o
@@ -267,6 +294,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... main_cmake"
+	@echo "... cbs_common/dubins.o"
+	@echo "... cbs_common/dubins.i"
+	@echo "... cbs_common/dubins.s"
 	@echo "... cbs_common/func_common.o"
 	@echo "... cbs_common/func_common.i"
 	@echo "... cbs_common/func_common.s"

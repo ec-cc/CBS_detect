@@ -2,7 +2,7 @@
 
 namespace zc::detect {
 
-int FuncCommon::SelectR1(double v) {
+double FuncCommon::SelectR1(double v) {
 	return (-1128 + 37.43 * v - 0.008036 * v * v);
 }
 

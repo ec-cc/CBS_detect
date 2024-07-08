@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+../cbs_common/dubins.h
+vector
+-
+
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/data_common.h
 vector
 -
@@ -19,26 +23,20 @@ math.h
 -
 memory
 -
+algorithm
+-
 data_common.h
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/data_common.h
 
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/struct_common.h
 
-/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBS.cpp
-CBS.h
-/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBS.h
-
-/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBS.h
-CBSDataStructures.h
-/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBSDataStructures.h
-LowLevel.h
-/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/LowLevel.h
-algorithm
--
-
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBSDataStructures.h
 ../cbs_common/func_common.h
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/func_common.h
+
+/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/LowLevel.cpp
+LowLevel.h
+/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/LowLevel.h
 
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/LowLevel.h
 fstream
@@ -51,4 +49,6 @@ queue
 -
 CBSDataStructures.h
 /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBSDataStructures.h
+dubins.h
+/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/dubins.h
 

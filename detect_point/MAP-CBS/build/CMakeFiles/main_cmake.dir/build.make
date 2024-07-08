@@ -83,9 +83,22 @@ CMakeFiles/main_cmake.dir/cbs_common/func_common.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main_cmake.dir/cbs_common/func_common.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/func_common.cpp -o CMakeFiles/main_cmake.dir/cbs_common/func_common.cpp.s
 
+CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o: CMakeFiles/main_cmake.dir/flags.make
+CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o: ../cbs_common/dubins.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o -c /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/dubins.cpp
+
+CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/dubins.cpp > CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.i
+
+CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_common/dubins.cpp -o CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.s
+
 CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o: CMakeFiles/main_cmake.dir/flags.make
 CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o: ../cbs_processing/CBS.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o -c /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBS.cpp
 
 CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.i: cmake_force
@@ -98,7 +111,7 @@ CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.s: cmake_force
 
 CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o: CMakeFiles/main_cmake.dir/flags.make
 CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o: ../cbs_processing/CBSDataStructures.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o -c /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/CBSDataStructures.cpp
 
 CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.i: cmake_force
@@ -111,7 +124,7 @@ CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.s: cmake_force
 
 CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o: CMakeFiles/main_cmake.dir/flags.make
 CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o: ../cbs_processing/LowLevel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o -c /home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/cbs_processing/LowLevel.cpp
 
 CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.i: cmake_force
@@ -126,6 +139,7 @@ CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.s: cmake_force
 main_cmake_OBJECTS = \
 "CMakeFiles/main_cmake.dir/main.cpp.o" \
 "CMakeFiles/main_cmake.dir/cbs_common/func_common.cpp.o" \
+"CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o" \
 "CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o" \
 "CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o" \
 "CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o"
@@ -135,12 +149,13 @@ main_cmake_EXTERNAL_OBJECTS =
 
 main_cmake: CMakeFiles/main_cmake.dir/main.cpp.o
 main_cmake: CMakeFiles/main_cmake.dir/cbs_common/func_common.cpp.o
+main_cmake: CMakeFiles/main_cmake.dir/cbs_common/dubins.cpp.o
 main_cmake: CMakeFiles/main_cmake.dir/cbs_processing/CBS.cpp.o
 main_cmake: CMakeFiles/main_cmake.dir/cbs_processing/CBSDataStructures.cpp.o
 main_cmake: CMakeFiles/main_cmake.dir/cbs_processing/LowLevel.cpp.o
 main_cmake: CMakeFiles/main_cmake.dir/build.make
 main_cmake: CMakeFiles/main_cmake.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable main_cmake"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zee001-w/st_test/CBS_detect/CBS_detect/detect_point/MAP-CBS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable main_cmake"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main_cmake.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

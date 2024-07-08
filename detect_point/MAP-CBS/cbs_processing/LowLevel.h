@@ -6,6 +6,7 @@
 #include <sstream>
 #include <queue>
 #include "CBSDataStructures.h"
+#include "dubins.h"
 
 #define  AS_ANGLE_LIMIT 15
 #define  AS_DIS_LIMIT 60000
@@ -33,8 +34,6 @@ struct compppp {
 
 	std::vector<std::vector<std::vector<VertexPtr>>> map;
 	std::priority_queue<VertexPtr, std::vector<VertexPtr>, compppp> openList;
-
-	bool extendTime(VertexPtr& start, std::vector<VertexPtr>& end_two, PathPtr& pathA, double extendtime);   //�ĳ�ֻ��ʱ����ص���������   Ч������
 	
 	bool GetPathOfAStar(bool& seek, VertexPtr& goal, VertexPtr& detect_point, PathPtr& path);
 
@@ -52,6 +51,7 @@ public:
 
 	LowLevelCBS() {}
 
+	bool ExtendTime(VertexPtr& start, std::vector<VertexPtr>& end_two, PathPtr& path, double extend_time);
 
 	bool AStar(VertexPtr& start, VertexPtr& goal, PathPtr& path, const std::vector<ConstraintPtr>& constraints);
 

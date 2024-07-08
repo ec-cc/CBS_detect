@@ -214,11 +214,16 @@ bool HighLevelCBS::UpdateSolutionByInvokingLowLevel(CTNodePtr& node) {
 	start->x_index = agents[agent_index]->x_start_index;
 	start->y_index = agents[agent_index]->y_start_index;
 
-	VertexPtr goal = agent_end[agent_index];
-	goal->x_index = agents[agent_index]->x_end_index;
-	goal->y_index = agents[agent_index]->y_end_index;
+	// VertexPtr goal = agent_end[agent_index];
+	// goal->x_index = agents[agent_index]->x_end_index;
+	// goal->y_index = agents[agent_index]->y_end_index;
 
-	CBS_EXCUTE_PLUS(_lowLevelSolver.AStar(start, goal, agents[agent_index]->path, node->GetConstraint())
+	std::vector<VertexPtr> goal;
+	goal.emplace_back(node->GetConstraint().back()->vertex);
+	goal.emplace_back(agent_end[agent_index]);
+	double time = node->GetConstraint().back()->time_step;
+
+	CBS_EXCUTE_PLUS(_lowLevelSolver.ExtendTime(start, goal, agents[agent_index]->path, time)
 			, node->SetSolutionForSingleAgent(agents[agent_index]), return true);
 	std::cout << " can't get path" << std::endl;
 	return false;

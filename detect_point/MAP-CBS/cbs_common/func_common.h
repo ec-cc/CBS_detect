@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <memory>
+#include <algorithm>
 #include "data_common.h"
 
 const double PI = 3.14159265358;
@@ -53,7 +54,7 @@ public:
     
     static int enterAngleIndex(double angel);
 
-    static int SelectR1(double v);
+    static double SelectR1(double v);
     
     static int vectorIndex(double &tt, const double &start, double &perLen, double mframe);
 
