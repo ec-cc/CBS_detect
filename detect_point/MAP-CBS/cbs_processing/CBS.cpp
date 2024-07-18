@@ -2,32 +2,36 @@
 
 namespace zc::cbs {
 
-CTNode::CTNode(const std::shared_ptr<CTNode>& node) : debug_index(node->debug_index), cost(node->cost), 
-			total_time(node->total_time) {
+CTNode::CTNode(const std::shared_ptr<CTNode>& node) {
+	CBS_EXCUTE(node == nullptr, return);
 
-		conflicts.reserve(node->conflicts.size());
-		for (const auto& conflict : node->conflicts) {
-			ConflictPtr temp_conflict = std::make_shared<Conflict>(conflict);
-			conflicts.emplace_back(temp_conflict);
-		}
+	debug_index = node->debug_index;
+	cost = node->cost; 
+	total_time = node->total_time;
 
-		constraints.reserve(node->constraints.size());
-		for (const auto& constraint : node->constraints) {
-			ConstraintPtr temp_constraint = std::make_shared<Constraint>(constraint);
-			constraints.emplace_back(temp_constraint);
-		}
+	conflicts.reserve(node->conflicts.size());
+	for (const auto& conflict : node->conflicts) {
+		ConflictPtr temp_conflict = std::make_shared<Conflict>(conflict);
+		conflicts.emplace_back(temp_conflict);
+	}
 
-		solutions.reserve(node->solutions.size());
-		for (const auto& solution : node->solutions) {
-			PathPtr temp_path = std::make_shared<Path>(solution);
-			solutions.emplace_back(temp_path);
-		}
+	constraints.reserve(node->constraints.size());
+	for (const auto& constraint : node->constraints) {
+		ConstraintPtr temp_constraint = std::make_shared<Constraint>(constraint);
+		constraints.emplace_back(temp_constraint);
+	}
 
-		dtps.reserve(node->dtps.size());
-		for (const auto& dtp : node->dtps) {
-			detectTimePeriodPtr temp_dtp = std::make_shared<detectTimePeriod>(dtp);
-			dtps.emplace_back(temp_dtp);
-		}
+	solutions.reserve(node->solutions.size());
+	for (const auto& solution : node->solutions) {
+		PathPtr temp_path = std::make_shared<Path>(solution);
+		solutions.emplace_back(temp_path);
+	}
+
+	dtps.reserve(node->dtps.size());
+	for (const auto& dtp : node->dtps) {
+		detectTimePeriodPtr temp_dtp = std::make_shared<detectTimePeriod>(dtp);
+		dtps.emplace_back(temp_dtp);
+	}
 }
 
 void CTNode::SetConflict(const ConflictPtr& new_conflict) {
@@ -56,6 +60,8 @@ void CTNode::SetSolution(const std::vector<PathPtr> &new_solution) {
 }
 
 void CTNode::SetSolutionForSingleAgent(AgentPtr& agent) {
+	CBS_EXCUTE(agent == nullptr || agent->path == nullptr, return);
+
 	agent->path->agent_index = agent->index;
 	solutions[agent->index] = std::make_shared<Path>(agent->path);
 }
@@ -68,8 +74,7 @@ void CTNode::SetDtp() {
 
 	for (const auto& solution : solutions) {
 
-		CBS_EXCUTE_PLUS(solution == nullptr, std::cout << "SOLUTION" << solution->agent_index << "NULL!" << std::endl, continue);
-		CBS_EXCUTE_PLUS(solution->nodes.empty(), std::cout << "SOLUTION" << solution->agent_index << "NO NODES!" << std::endl, continue);
+		CBS_EXCUTE_PLUS(solution == nullptr || solution->nodes.empty(), std::cout << "SETDTP FAILED!" << std::endl, continue);
 		
 		dtps.emplace_back(std::make_shared<detectTimePeriod>());
 		auto dtp_temp = dtps.back();
@@ -87,7 +92,7 @@ void CTNode::SetDtp() {
 
 		dtp_temp->agent_index = solution->agent_index;
 		dtp_temp->t_start = solution->nodes[solution->nodes.size() - 2]->total_time;
-		dtp_temp->t_end = dtp_temp->t_start + zc::detect::FuncCommon::encapsulationTime(mine, enemy);
+		dtp_temp->t_end = dtp_temp->t_start + zc::detect::FuncCommon::EncapsulationTime(mine, enemy);
 		dtp_temp->vertexSTgt = solution->nodes[solution->nodes.size() - 2];
 	}
 }
@@ -100,7 +105,7 @@ void CTNode::SetSIC() {
 
 	for (const auto& dtp : dtps) {
 
-		CBS_EXCUTE_PLUS(dtp == nullptr, std::cout << "DTP" << dtp->agent_index << "NULL!" << std::endl, continue)
+		CBS_EXCUTE_PLUS(dtp == nullptr, std::cout << "SETSIC FAILED!" << std::endl, continue)
 
 		std::vector<double> temp_time;
 		temp_time.reserve(2);
@@ -144,9 +149,9 @@ void HighLevelCBS::ProcessOfCBS() {
 }
 
 void HighLevelCBS::SetDataOfCBS(double id, double start_x, double start_y, double start_heading, double start_v,
-		double goal_x, double goal_y, double goal_heading, double goal_v) {
+		double goal_x, double goal_y, double goal_heading, double goal_state_v) {
 	AgentPtr agent = std::make_shared<Agent>(id, start_x, start_y, start_heading, start_v, 
-		goal_x, goal_y, goal_heading, goal_v);
+		goal_x, goal_y, goal_heading, goal_state_v);
 	agents.emplace_back(agent);
 }
 
@@ -191,15 +196,8 @@ bool HighLevelCBS::ValidatePathsInNode(CTNodePtr& node) {
 
 void HighLevelCBS::FindPathsForAllAgents(CTNodePtr& node) {
 	for (int i = 0; i < agents.size(); ++i) {
-
 		auto start = agent_start[i];
-		start->x_index = agents[i]->x_start_index;
-		start->y_index = agents[i]->y_start_index;
-		start->angle_index = agents[i]->angle_start_index;
-
 		auto goal = agent_end[i];
-		goal->x_index = agents[i]->x_end_index;
-		goal->y_index = agents[i]->y_end_index;
 
 		_lowLevelSolver.AStar(start, goal, agents[i]->path, node->GetConstraint());
 		agents[i]->path->agent_index = i;
@@ -208,15 +206,13 @@ void HighLevelCBS::FindPathsForAllAgents(CTNodePtr& node) {
 }
 
 bool HighLevelCBS::UpdateSolutionByInvokingLowLevel(CTNodePtr& node) {
+	CBS_EXCUTE(node == nullptr || node->GetConstraint().empty(), return false);
+	CBS_EXCUTE(node->GetConstraint().front()->agent == nullptr, return false);
+
 	int agent_index = node->GetConstraint().front()->agent->index;
 
+	CBS_EXCUTE(agent_start.size() <= agent_index || agent_end.size() <= agent_index, return false);
 	VertexPtr start = agent_start[agent_index];
-	start->x_index = agents[agent_index]->x_start_index;
-	start->y_index = agents[agent_index]->y_start_index;
-
-	// VertexPtr goal = agent_end[agent_index];
-	// goal->x_index = agents[agent_index]->x_end_index;
-	// goal->y_index = agents[agent_index]->y_end_index;
 
 	std::vector<VertexPtr> goal;
 	goal.emplace_back(node->GetConstraint().back()->vertex);
@@ -230,6 +226,8 @@ bool HighLevelCBS::UpdateSolutionByInvokingLowLevel(CTNodePtr& node) {
 }
 
 void HighLevelCBS::UpdateCBSRes(const CTNodePtr& node) {
+	CBS_EXCUTE(node == nullptr, return);
+	
 	equal_times = 0;
 	max_cost = node->GetCost();
 	total_time_of_max_cost = node->GetTotalTime();
@@ -237,12 +235,6 @@ void HighLevelCBS::UpdateCBSRes(const CTNodePtr& node) {
 	std::cout << "-------------------------------------" << std::endl;
 	
 	res_CTN = std::make_shared<CTNode>(node);
-
-	// result_CTN_path.reserve(node->GetSolution().size());
-	// for (const auto& path : node->GetSolution()) {
-	// 	PathPtr temp_path = std::make_shared<Path>(path);
-	// 	result_CTN_path.emplace_back(temp_path);
-	// }
 }
 
 void HighLevelCBS::RunCBS() {
@@ -314,19 +306,19 @@ void HighLevelCBS::InitialCBS() {
 	_lowLevelSolver.SetCentreY((yMax + yMin) / 2);
 
 	for (auto &agent : agents) {
-		agent->x_start_index= zc::detect::FuncCommon::vectorIndex(agent->start_state_x, _lowLevelSolver.GetCentreX(), _lowLevelSolver.GetLengthX(), _lowLevelSolver.GetFrameX());
-		agent->y_start_index= zc::detect::FuncCommon::vectorIndex(agent->start_state_y, _lowLevelSolver.GetCentreY(), _lowLevelSolver.GetLengthY(), _lowLevelSolver.GetFrameY());
-		agent->angle_start_index = zc::detect::FuncCommon::enterAngleIndex(agent->start_state_heading);
-		agent->x_end_index = zc::detect::FuncCommon::vectorIndex(agent->goal_state_x, _lowLevelSolver.GetCentreX(), _lowLevelSolver.GetLengthX(), _lowLevelSolver.GetFrameX());
-		agent->y_end_index = zc::detect::FuncCommon::vectorIndex(agent->goal_state_y, _lowLevelSolver.GetCentreY(), _lowLevelSolver.GetLengthY(), _lowLevelSolver.GetFrameY());
-		agent->angle_end_index = zc::detect::FuncCommon::enterAngleIndex(agent->goal_state_heading);
-	}
+		agent->x_start_index= zc::detect::FuncCommon::VectorIndex(agent->start_state_x, _lowLevelSolver.GetCentreX(), _lowLevelSolver.GetLengthX(), _lowLevelSolver.GetFrameX());
+		agent->y_start_index= zc::detect::FuncCommon::VectorIndex(agent->start_state_y, _lowLevelSolver.GetCentreY(), _lowLevelSolver.GetLengthY(), _lowLevelSolver.GetFrameY());
+		agent->angle_start_index = zc::detect::FuncCommon::EnterAngleIndex(agent->start_state_heading);
+		agent->x_end_index = zc::detect::FuncCommon::VectorIndex(agent->goal_state_x, _lowLevelSolver.GetCentreX(), _lowLevelSolver.GetLengthX(), _lowLevelSolver.GetFrameX());
+		agent->y_end_index = zc::detect::FuncCommon::VectorIndex(agent->goal_state_y, _lowLevelSolver.GetCentreY(), _lowLevelSolver.GetLengthY(), _lowLevelSolver.GetFrameY());
+		agent->angle_end_index = zc::detect::FuncCommon::EnterAngleIndex(agent->goal_state_heading);
 
-	for (int i = 0; i < agents.size(); i++) {
-		VertexPtr pStart = std::make_shared<Vertex>(agents[i]->start_state_x, agents[i]->start_state_y, agents[i]->start_state_heading, agents[i]->start_state_v);
-		VertexPtr pEnd = std::make_shared<Vertex>(agents[i]->goal_state_x, agents[i]->goal_state_y, agents[i]->goal_state_heading, agents[i]->goal_v);
+		VertexPtr pStart = std::make_shared<Vertex>(agent->start_state_x, agent->start_state_y, agent->start_state_heading, agent->start_state_v, 
+							agent->x_start_index, agent->y_start_index, agent->angle_start_index);
+		VertexPtr pEnd = std::make_shared<Vertex>(agent->goal_state_x, agent->goal_state_y, agent->goal_state_heading, agent->goal_state_v, 
+							agent->x_end_index, agent->y_end_index, agent->angle_end_index);
 		agent_start.emplace_back(pStart);
-		agent_end.emplace_back(pEnd);
+		agent_end.emplace_back(pEnd);	
 	}
 
 	_lowLevelSolver.SetGridWidth(_lowLevelSolver.GetFrameX());
