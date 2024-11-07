@@ -100,14 +100,14 @@ struct comppp {
 	}
 };
 
-	int search_times;                                                      //  ��������
-	int equal_times;                                                       //  ���������������ֵ��ȵĴ���
-	int max_search_times;                                                   //  ���������������
-	int max_equal_times;                                                    //  �����ͬ��������    ��Լ������µľֲ����Ž�
-	double handover_detect_rate;                                            //  ���õĽ���ʱ�����
-	double co_locate_time_rate;                                              //  ����Эͬ��λʱ�����
-	double max_cost;                                                       //  ������
-	double total_time_of_max_cost;                                            //  �����۶�Ӧ��̽����ʱ��
+	int search_times;                                                      
+	int equal_times;                                                       
+	int max_search_times;                                                   
+	int max_equal_times;                                                   
+	double handover_detect_rate;                                           
+	double co_locate_time_rate;                                          
+	double max_cost;                                                   
+	double total_time_of_max_cost;                                         
 
 	std::vector<AgentPtr> agents;
 	std::vector<VertexPtr> agent_start;
@@ -116,7 +116,7 @@ struct comppp {
 
 	CTNodePtr res_CTN;
 	LowLevelCBS _lowLevelSolver;
-	std::priority_queue<CTNodePtr, std::vector<CTNodePtr>, comppp> openListHigh;        //  ���ȶ���
+	std::priority_queue<CTNodePtr, std::vector<CTNodePtr>, comppp> openListHigh;       
 
 	void UpdateCBSRes(const CTNodePtr& node);
 		
@@ -134,10 +134,10 @@ public:
 
 	HighLevelCBS();
 
-	~HighLevelCBS() = default;                                                         // ����������Ҫ delete �����ı��� 
+	~HighLevelCBS() = default;                                                         
 	
 	void SetDataOfCBS(double id, double start_x, double start_y, double start_heading, double start_v,
-		double goal_x, double goal_y, double goal_heading, double goal_v);
+		double goal_x, double goal_y, double goal_heading, double goal_state_v);
 
 	void ProcessOfCBS();
 	

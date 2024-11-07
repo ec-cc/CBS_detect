@@ -9,29 +9,48 @@ namespace zc::cbs {
 struct Constraint;
 using ConstraintPtr = std::shared_ptr<Constraint>;
 
+struct Agent;
+using AgentPtr = std::shared_ptr<Agent>;
+
 struct Vertex {
 	Vertex() :
 		g(0), h(0), f(0) {
 		parent = NULL;
 	}
 
+	Vertex(double _x, double _y, double _heading, double _v, int _x_index, int _y_index, int _angle_index) : 
+			g(0), h(0), f(0), 
+			time(0), total_time(0), end_time(0), 
+			step(0), depth(0), visited(false)  {
+		x = _x;
+		y = _y;
+		heading = _heading;
+		v = _v;
+		x_index = _x_index;
+		y_index = _y_index;
+		angle_index = _angle_index;
+		parent = NULL;
+	}
+
+	// Vertex(double x, double y) :
+	// 	x(x), y(y), g(0), h(0), f(0) {
+	// 	parent = NULL;
+	// 	// obstacle = obstacle;
+	// 	depth = 0;
+	// }
+
 	Vertex(double x, double y, double heading, double v) :
-		g(0), h(0), f(0), x(x), y(y), heading(heading), v(v) {
-		parent = NULL;
-	}
+		x(x), y(y), heading(heading), v(v), g(0), h(0), f(0), end_time(0) {}
 
-	Vertex(double x, double y, bool obstacle = false) :
-		x(x), y(y), g(0), h(0), f(0) {
+	Vertex(double f, double g, double h, double x, double y, double z, double azimuth, double v, int index_x, int index_y, int index_angle) :
+			x(x), y(y), z(z), g(g), h(h), f(f), heading(azimuth), v(v), x_index(index_x), y_index(index_y), angle_index(index_angle) {
 		parent = NULL;
-		obstacle = obstacle;
+		// obstacle = false;
 		depth = 0;
-	}
-
-	Vertex(double f, double g, double h, double x, double y, double z, double azimuth, double a, double v) :
-		x(x), y(y), g(g), h(h), f(f), heading(azimuth), v(v) {
-		parent = NULL;
-		obstacle = false;
-		depth = 0;
+		step = 0;
+		time = 0;
+		total_time = 0;
+		end_time = 0;
 	}
 
 	Vertex(std::shared_ptr<Vertex> node) {
@@ -47,11 +66,15 @@ struct Vertex {
 		h = node->h; 
 		f = node->f; 
 
+		x_index = node->x_index;
+		y_index = node->y_index;
+		angle_index = node->angle_index;
+
 		time = node->time;
 		end_time = node->end_time;
 		total_time = node->total_time;
 		visited = node->visited;
-		nov = node->nov;
+		// nov = node->nov;
 		depth = node->depth;
 
 		parent = nullptr;
@@ -62,20 +85,26 @@ struct Vertex {
 		return v.x_index == this->x_index && v.y_index == this->y_index;
 	}
 
+	bool visited;
+
+	int step;
+	int depth;
+
 	double x;
 	double y;
 	double z = 0;
 	double heading;
 	double v;
+
 	double g;
 	double h;
 	double f;
-	bool visited;
+
 	double time;
-	double total_time = 0;
-	double end_time = 0; //̽��Ľ���ʱ��
-	int step = 0;
-	double nov;
+	double total_time;
+	double end_time; 
+
+	// double nov;
 
 	double x_index;
 	double y_index;
@@ -83,9 +112,8 @@ struct Vertex {
 
 	
 	std::shared_ptr<Vertex> parent;
-	int depth;
 
-	bool obstacle;
+	// bool obstacle;
 };
 using VertexPtr = std::shared_ptr<Vertex>;
 
@@ -129,7 +157,7 @@ struct Path {
 
 	std::vector<VertexPtr> nodes;
 
-	std::vector<ConstraintPtr> constraints;                   // ÿ��·�������Լ���ǣ� 
+	std::vector<ConstraintPtr> constraints;                   
 
 	int get_cost() { 
 		return nodes.size(); 
@@ -141,11 +169,11 @@ struct Agent {
 	Agent(double index1, double start_state_x1, double start_state_y1, double start_state_heading1, double start_state_v1, 
 			double goal_state_x1, double goal_state_y1, double goal_state_heading1, double v)
 			: index(index1), start_state_x(start_state_x1), start_state_y(start_state_y1), start_state_heading(start_state_heading1),
-		start_state_v(start_state_v1), goal_state_x(goal_state_x1), goal_state_y(goal_state_y1), goal_state_heading(goal_state_heading1), goal_v(v) {
+		start_state_v(start_state_v1), goal_state_x(goal_state_x1), goal_state_y(goal_state_y1), goal_state_heading(goal_state_heading1), goal_state_v(v) {
 		path = std::make_shared<Path>(index1);
 	}
 
-	Agent(const std::shared_ptr<Agent>& agent) {
+	Agent(const AgentPtr& agent) {
 		CBS_EXCUTE_PLUS(agent == nullptr, std::cout << "AGENT COPY CONSTRUCTOR FAILED!" << std::endl, return);
 		index = agent->index;
 
@@ -156,7 +184,7 @@ struct Agent {
 
 		goal_state_x = agent->goal_state_x; 
 		goal_state_y = agent->goal_state_y; 
-		goal_v = agent->goal_v; 
+		goal_state_v = agent->goal_state_v; 
 		goal_state_heading = agent->goal_state_heading;
 
 		x_start_index = agent->x_start_index; 
@@ -180,7 +208,7 @@ struct Agent {
 	double goal_state_x;
 	double goal_state_y;
 	double goal_state_heading;
-	double goal_v;  
+	double goal_state_v;  
 	double x_start_index;
 	double y_start_index;
 	double angle_start_index;
@@ -190,7 +218,6 @@ struct Agent {
 
 	PathPtr path;
 };
-using AgentPtr = std::shared_ptr<Agent>;
 
 struct Constraint {
 	Constraint(AgentPtr agent1, VertexPtr vertex1, double time_step1) :
@@ -265,13 +292,13 @@ using detectTimePeriodPtr = std::shared_ptr<detectTimePeriod>;
 class CBSCommonFunc {
 public:
 
-	static bool getDTPSolution(const std::vector<detectTimePeriodPtr>& dtp, std::vector<PathPtr> solutions);             // �õ�ʱ�����ⷽ��
+	static bool getDTPSolution(const std::vector<detectTimePeriodPtr>& dtp, std::vector<PathPtr> solutions);             
 	
-	static double perdictFlyTime(VertexPtr& now, VertexPtr& future);     //����Ԥ�����ʱ��
+	static double perdictFlyTime(VertexPtr& now, VertexPtr& future);     
 
 	static float Clip(float n, float lower, float upper);
 
-	static std::vector<VertexPtr>& lineInterpolate(VertexPtr& start, VertexPtr& end, double time);	//�����߽���5sһ��ֵ���õ�һϵ��Point��
+	static std::vector<VertexPtr>& lineInterpolate(VertexPtr& start, VertexPtr& end, double time);	
 };
 
 } // namespace zc::cbs

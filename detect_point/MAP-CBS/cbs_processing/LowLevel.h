@@ -6,9 +6,9 @@
 #include <sstream>
 #include <queue>
 #include "CBSDataStructures.h"
-#include "dubins.h"
+#include "../cbs_common/dubins.h"
 
-#define  AS_ANGLE_LIMIT 15
+#define  AS_ANGLE_LIMIT 1
 #define  AS_DIS_LIMIT 60000
 
 namespace zc::cbs {
@@ -33,7 +33,7 @@ struct compppp {
 	double r0 = 7000;		
 
 	std::vector<std::vector<std::vector<VertexPtr>>> map;
-	std::priority_queue<VertexPtr, std::vector<VertexPtr>, compppp> openList;
+	std::priority_queue<VertexPtr, std::vector<VertexPtr>, compppp> open_list;
 	
 	bool GetPathOfAStar(bool& seek, VertexPtr& goal, VertexPtr& detect_point, PathPtr& path);
 

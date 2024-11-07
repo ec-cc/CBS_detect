@@ -41,7 +41,7 @@ double FuncCommon::DisOfTwoPoint(double slog, double slat, double elog, double e
 	return distance;
 }
 
-float FuncCommon::Cal_Heading_T(double Long, double Lat, double long_T, double lat_T) {
+float FuncCommon::CalHeadingT(double Long, double Lat, double long_T, double lat_T) {
 	double  heading_T;
 	double	DLong, DLat;
 	double  distance_to_target;
@@ -111,7 +111,7 @@ std::pair<double, double> FuncCommon::CompPosition(float delta_de_inm, float del
 	return std::make_pair(Out_Long, Out_Lati);
 }
 
-double FuncCommon::angle_standard(double& azimuth) {
+double FuncCommon::AngleStandard(double& azimuth) {
 	while (azimuth < 0 || azimuth > 360) { 
 		CBS_EXCUTE(azimuth < 0, azimuth += 360); 
 		CBS_EXCUTE(azimuth > 360, azimuth -= 360); 
@@ -119,7 +119,7 @@ double FuncCommon::angle_standard(double& azimuth) {
 	return azimuth;
 }
 
-std::pair<double, double> FuncCommon::angle_3D(Point mine, Point enemy) { 
+std::pair<double, double> FuncCommon::Angle3D(Point mine, Point enemy) { 
 	std::pair<double, double> res;
 	double q[3] = { 0 };
 	double qTrans[3] = { 0 };
@@ -173,7 +173,7 @@ std::pair<double, double> FuncCommon::angle_3D(Point mine, Point enemy) {
 	return res;
 }
 
-double FuncCommon::point_angle(double mine_x, double mine_y, double enemy_x, double enemy_y){
+double FuncCommon::PointAngle(double mine_x, double mine_y, double enemy_x, double enemy_y){
 	if (mine_x == enemy_x && mine_y == enemy_y) {
 		return 0;
 	} else if ((mine_x < enemy_x) && (mine_y < enemy_y)) {
@@ -197,20 +197,20 @@ double FuncCommon::point_angle(double mine_x, double mine_y, double enemy_x, dou
 	return 0;
 }
 
-double FuncCommon::distance(double mine_x, double mine_y, double mine_z, double enemy_x, double enemy_y, double enemy_z) {
+double FuncCommon::Distance(double mine_x, double mine_y, double mine_z, double enemy_x, double enemy_y, double enemy_z) {
 	double x_diff = abs(mine_x - enemy_x);
 	double y_diff = abs(mine_y - enemy_y);
 	double z_diff = abs(mine_z - enemy_z);
 	return (sqrt(pow(x_diff, 2) + pow(y_diff, 2) + pow(z_diff, 2)));
 }
 
-double FuncCommon::distance(double mine_x, double mine_y, double enemy_x, double enemy_y) {
+double FuncCommon::Distance(double mine_x, double mine_y, double enemy_x, double enemy_y) {
 	double x_diff = abs(mine_x - enemy_x);
 	double y_diff = abs(mine_y - enemy_y);
 	return (sqrt(pow(x_diff, 2) + pow(y_diff, 2)));
 }
 
-Point2f FuncCommon::predictPlace(const Point& now, const double v[], const double azi[], const double &num, const double &sampleTime) {
+Point2f FuncCommon::PredictPlace(const Point& now, const double v[], const double azi[], const double &num, const double &sampleTime) {
 	double dist = now.v*sampleTime;
 	double predictX = now.x + sin(now.azimuth / 57.3)*dist;
 	double predictY = now.y + cos(now.azimuth / 57.3)*dist;
@@ -222,7 +222,7 @@ Point2f FuncCommon::predictPlace(const Point& now, const double v[], const doubl
 	return { predictX,predictY };
 }
 
-int FuncCommon::vectorIndex(double &tt, const double &start, double &perLen, double mframe) {
+int FuncCommon::VectorIndex(double &tt, const double &start, double &perLen, double mframe) {
 	CBS_EXCUTE(perLen == 0, perLen = 1);
 
 	if (tt >= start) {
@@ -236,7 +236,7 @@ int FuncCommon::vectorIndex(double &tt, const double &start, double &perLen, dou
 	}
 }
 
-int FuncCommon::enterAngleIndex(double angel) {
+int FuncCommon::EnterAngleIndex(double angel) {
 	if (angel >= 0 && angel < 10)
 		return 0;
 	else if (angel >= 10 && angel < 20)
@@ -313,17 +313,17 @@ int FuncCommon::enterAngleIndex(double angel) {
 		return 36;
 }
 
-bool FuncCommon::isEqualDouble(double a, double b) {
+bool FuncCommon::IsEqualDouble(double a, double b) {
 	return fabs(a-b) < 0.000001;
 }
 
-Point FuncCommon::exLine(Point &p, double time) {
+Point FuncCommon::Exline(Point &p, double time) {
 	double x = p.x + p.v * time*sin(p.azimuth / 57.3);
 	double y = p.y + p.v * time*cos(p.azimuth / 57.3);
 	return { x,y,p.z,p.azimuth,p.v };
 }
 
-const std::vector<maneuverOutput>& FuncCommon::speedSelect(double speed) {
+const std::vector<maneuverOutput>& FuncCommon::SpeedSelect(double speed) {
 	if (speed >= 260)
 		return actionSample270;
 	else if (speed >= 240)
@@ -338,7 +338,7 @@ const std::vector<maneuverOutput>& FuncCommon::speedSelect(double speed) {
 		return actionSample170;
 }
 
-const std::vector<maneuverOutput>& FuncCommon::assignmentSpeedSelect(double speed) {
+const std::vector<maneuverOutput>& FuncCommon::AssignmentSpeedSelect(double speed) {
 	if (speed >= 260)
 		return assignmentActionSample270;
 	else if (speed >= 240)
@@ -354,7 +354,7 @@ const std::vector<maneuverOutput>& FuncCommon::assignmentSpeedSelect(double spee
 }
 
 
-void FuncCommon::getLinePara(double& x1, double& y1, double& x2, double& y2, LinePara & LP) {
+void FuncCommon::GetLinePara(double& x1, double& y1, double& x2, double& y2, LinePara & LP) {
 	double m = 0;
 
 	// �������  
@@ -369,9 +369,9 @@ void FuncCommon::getLinePara(double& x1, double& y1, double& x2, double& y2, Lin
 	}
 }
 
-Point2f FuncCommon::getPoint(Point2f mine, double mineAzi, double enemyPosAng) {
+Point2f FuncCommon::GetPoint(Point2f mine, double mineAzi, double enemyPosAng) {
 	double GPSEnemyAng = enemyPosAng;
-	GPSEnemyAng = angle_standard(GPSEnemyAng);
+	GPSEnemyAng = AngleStandard(GPSEnemyAng);
 	auto bb = cos(GPSEnemyAng / 57.3);
 	auto bbc = sin(GPSEnemyAng / 57.3);
 	double pointX = mine.x + 60000 * sin(GPSEnemyAng / 57.3);
@@ -379,7 +379,7 @@ Point2f FuncCommon::getPoint(Point2f mine, double mineAzi, double enemyPosAng) {
 	return Point2f{ pointX,pointY };
 }
 
-bool FuncCommon::getCross(LinePara para1, LinePara para2, Point2f & pt) {
+bool FuncCommon::GetCross(LinePara para1, LinePara para2, Point2f & pt) {
 	// �ж��Ƿ�ƽ��  
 	if (abs(para1.k - para2.k) > 0.0001) {
 		pt.x = (para2.b - para1.b) / (para1.k - para2.k);
@@ -391,7 +391,7 @@ bool FuncCommon::getCross(LinePara para1, LinePara para2, Point2f & pt) {
 	}
 }
 
-void FuncCommon::crossP(Point mine, Point2f B, Point2f C, double enemyToA, double enemyToB, double enemyToC, double GPSEnemyAngL,
+void FuncCommon::CrossP(Point mine, Point2f B, Point2f C, double enemyToA, double enemyToB, double enemyToC, double GPSEnemyAngL,
 	LinePara enemyLinePara, Point2f&crossPoint) {
 	//ǰ�᣺AΪ�ɻ���ǰ��ͷ������λ�ڵ�һ���ޣ�B��C�Ϸ�
 	//���BС��180�������ֱ�Ӽ���
@@ -399,36 +399,36 @@ void FuncCommon::crossP(Point mine, Point2f B, Point2f C, double enemyToA, doubl
 		auto nextB = enemyToB + 360;
 		if (GPSEnemyAngL > enemyToB && GPSEnemyAngL <= enemyToC) {
 			LinePara BToC;
-			getLinePara(B.x, B.y, C.x, C.y, BToC);
-			getCross(enemyLinePara, BToC, crossPoint);
+			GetLinePara(B.x, B.y, C.x, C.y, BToC);
+			GetCross(enemyLinePara, BToC, crossPoint);
 		} else if (GPSEnemyAngL > enemyToC && GPSEnemyAngL <= enemyToA) {
 			LinePara AToC;
-			getLinePara(mine.x, mine.y, C.x, C.y, AToC);
-			getCross(enemyLinePara, AToC, crossPoint);
+			GetLinePara(mine.x, mine.y, C.x, C.y, AToC);
+			GetCross(enemyLinePara, AToC, crossPoint);
 		} else {
 			LinePara AToB;
-			getLinePara(B.x, B.y, mine.x, mine.y, AToB);
-			getCross(enemyLinePara, AToB, crossPoint);
+			GetLinePara(B.x, B.y, mine.x, mine.y, AToB);
+			GetCross(enemyLinePara, AToB, crossPoint);
 		}
 	} else {
 		auto nextB = enemyToB - 360;
 		if (GPSEnemyAngL > nextB && GPSEnemyAngL <= enemyToC) {
 			LinePara BToC;
-			getLinePara(B.x, B.y, C.x, C.y, BToC);
-			getCross(enemyLinePara, BToC, crossPoint);
+			GetLinePara(B.x, B.y, C.x, C.y, BToC);
+			GetCross(enemyLinePara, BToC, crossPoint);
 		} else if (GPSEnemyAngL > enemyToC && GPSEnemyAngL <= enemyToA) {
 			LinePara AToC;
-			getLinePara(mine.x, mine.y, C.x, C.y, AToC);    //��   6.14
-			getCross(enemyLinePara, AToC, crossPoint);
+			GetLinePara(mine.x, mine.y, C.x, C.y, AToC);    //��   6.14
+			GetCross(enemyLinePara, AToC, crossPoint);
 		} else {
 			LinePara AToB;
-			getLinePara(B.x, B.y, mine.x, mine.y, AToB);    //��   6.14
-			getCross(enemyLinePara, AToB, crossPoint);
+			GetLinePara(B.x, B.y, mine.x, mine.y, AToB);    //��   6.14
+			GetCross(enemyLinePara, AToB, crossPoint);
 		}
 	}
 }
 
-std::vector<Point2f> FuncCommon::positionTrianglePoint(Point mine, double L) {
+std::vector<Point2f> FuncCommon::PositionTrianglePoint(Point mine, double L) {
 	std::vector<Point2f> result;
 	Point2f A, B, C;
 	A.x = mine.x + L * sin((mine.azimuth + 30) / 57.3);
@@ -437,29 +437,29 @@ std::vector<Point2f> FuncCommon::positionTrianglePoint(Point mine, double L) {
 	C.y = mine.y + 75000 * cos((mine.azimuth + 30) / 57.3);
 	B.x = mine.x + L * sin((mine.azimuth + 30) / 57.3) + (75000 - L)*sin((mine.azimuth - 30) / 57.3);
 	B.y = mine.y + L * cos((mine.azimuth + 30) / 57.3) + (75000 - L)*cos((mine.azimuth - 30) / 57.3);
-	auto aaa = distance(A.x, A.y, B.x, B.y);
-	auto aaaa = distance(A.x, A.y, C.x, C.y);
+	auto aaa = Distance(A.x, A.y, B.x, B.y);
+	auto aaaa = Distance(A.x, A.y, C.x, C.y);
 	result.push_back(A);
 	result.push_back(B);
 	result.push_back(C);
 	return result;
 }
 
-double FuncCommon::product(Point2f p1, Point2f p2, Point2f p3) {
+double FuncCommon::Product(Point2f p1, Point2f p2, Point2f p3) {
 	//���ȸ����������p1p2��p1p3��������Ȼ���ټ�����
 	return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
 }
 
-bool FuncCommon::isInTriangle(Point2f p1, Point2f p2, Point2f p3, Point2f o) {
+bool FuncCommon::IsInTriangle(Point2f p1, Point2f p2, Point2f p3, Point2f o) {
 	//��֤p1��p2��p3����ʱ��˳��,���˸��ݹ�
-	if (product(p1, p2, p3) < 0)
-		return isInTriangle(p1, p3, p2, o);
-	if (product(p1, p2, o) > 0 && product(p2, p3, o) > 0 && product(p3, p1, o) > 0)
+	if (Product(p1, p2, p3) < 0)
+		return IsInTriangle(p1, p3, p2, o);
+	if (Product(p1, p2, o) > 0 && Product(p2, p3, o) > 0 && Product(p3, p1, o) > 0)
 		return true;
 	return false;
 }
 
-std::vector<Point2f> FuncCommon::trianglePoint(Point mine,double sideLength) {
+std::vector<Point2f> FuncCommon::TrianglePoint(Point mine,double sideLength) {
 	std::vector<Point2f> result;
 	Point2f A, B;
 	A.x = mine.x + sideLength * cos((mine.azimuth + 30) / 57.296);
@@ -471,13 +471,13 @@ std::vector<Point2f> FuncCommon::trianglePoint(Point mine,double sideLength) {
 	return result;
 }
 
-double FuncCommon::detectTime(Point mine, Point enemy, Point2f B, Point2f C) {
+double FuncCommon::DetectTime(Point mine, Point enemy, Point2f B, Point2f C) {
 	//B�ϣ�C��
-	mine.azimuth = angle_standard(mine.azimuth);
+	mine.azimuth = AngleStandard(mine.azimuth);
 	//double temp = mine.azimuth - 180;
 	//double mine180 = angle_standard(temp);
 	//pair<double, double>mineLineAngle = mine180 < mine.azimuth ? make_pair(mine180, mine.azimuth) : make_pair(mine.azimuth, mine180);
-	enemy.azimuth = angle_standard(enemy.azimuth);
+	enemy.azimuth = AngleStandard(enemy.azimuth);
 	//�����з�ԭʼ����
 	double originalX = enemy.x;
 	double originalY = enemy.y;
@@ -488,22 +488,22 @@ double FuncCommon::detectTime(Point mine, Point enemy, Point2f B, Point2f C) {
 	//auto vvdsv = std::atan2(originalY, originalX);
 	double enemyPlaceAngle = atan2(originalY - mine.y, originalX - mine.x) > 0 ? atan2(originalY - mine.y, originalX - mine.x)*57.296 : (atan2(originalY - mine.y, originalX - mine.x)*57.296 + 360);
 	double diffAngle = enemyPlaceAngle - mine.azimuth;   //�õ��з����Һ����ļн�
-	double disEnemy = distance(originalX, originalY, mine.x, mine.y);
+	double disEnemy = Distance(originalX, originalY, mine.x, mine.y);
 	enemy.x = disEnemy * cos(diffAngle / 57.296);       //��̽��������ת�Ƶ�������x���غϵ������Σ���˵з������궼��䶯
 	enemy.y = disEnemy * sin(diffAngle / 57.296);
-	Point2f enemyOtherPoint = getPoint({ originalX,originalY }, mine.azimuth, enemy.azimuth);
+	Point2f enemyOtherPoint = GetPoint({ originalX,originalY }, mine.azimuth, enemy.azimuth);
 	LinePara enemyLinePara;
 	//����з�ֱ�߷���
-	getLinePara(originalX, originalY, enemyOtherPoint.x, enemyOtherPoint.y, enemyLinePara);
-	Point2f mineOtherPoint = getPoint({ mine.x,mine.y }, mine.azimuth, mine.azimuth);
+	GetLinePara(originalX, originalY, enemyOtherPoint.x, enemyOtherPoint.y, enemyLinePara);
+	Point2f mineOtherPoint = GetPoint({ mine.x,mine.y }, mine.azimuth, mine.azimuth);
 	LinePara mineLinePara;
 	//�����ҷ�ֱ�߷���
-	getLinePara(mine.x, mine.y, mineOtherPoint.x, mineOtherPoint.y, mineLinePara);
+	GetLinePara(mine.x, mine.y, mineOtherPoint.x, mineOtherPoint.y, mineLinePara);
 	bool isIntersect;      //�жϵз�ֱ��ֱ�����Һ����ཻ�����ӳ����ཻ
 
 	Point2f nowIntersectP;
-	if (getCross(mineLinePara, enemyLinePara, nowIntersectP)) {   //�õ���ʱ��ֱ�߽���
-		double disIntersectP = distance(nowIntersectP.x, nowIntersectP.y, mine.x, mine.y);
+	if (GetCross(mineLinePara, enemyLinePara, nowIntersectP)) {   //�õ���ʱ��ֱ�߽���
+		double disIntersectP = Distance(nowIntersectP.x, nowIntersectP.y, mine.x, mine.y);
 		Point2f afterIntersectP;
 		afterIntersectP.x = disIntersectP * cos(0);     //����ת�Ƶ�x����
 		afterIntersectP.y = 0;
@@ -525,7 +525,7 @@ double FuncCommon::detectTime(Point mine, Point enemy, Point2f B, Point2f C) {
 			{
 				enemy.azimuth = atan2((afterIntersectP.y - enemy.y), (afterIntersectP.x - enemy.x))*57.296 + 180;
 			}
-			enemy.azimuth = angle_standard(enemy.azimuth);
+			enemy.azimuth = AngleStandard(enemy.azimuth);
 		}
 		//��ת���ĵз�����Ƿ����ж�   �жϴ��ĸ��߳���
 		if (enemy.azimuth >= 0 && enemy.azimuth < 90)
@@ -606,9 +606,9 @@ double FuncCommon::detectTime(Point mine, Point enemy, Point2f B, Point2f C) {
 
 }
 
-double FuncCommon::detectScore(const Point &mine,const Point &enemy) {
-	auto dist = distance(mine.x, mine.y, enemy.x, enemy.y);
-	double enemyAzi = point_angle(mine.x, mine.y, enemy.x, enemy.y);
+double FuncCommon::DetectScore(const Point &mine,const Point &enemy) {
+	auto dist = Distance(mine.x, mine.y, enemy.x, enemy.y);
+	double enemyAzi = PointAngle(mine.x, mine.y, enemy.x, enemy.y);
 	double angleDiff = abs(mine.azimuth - enemyAzi) > 180 ? 360 - abs(mine.azimuth - enemyAzi) : abs(mine.azimuth - enemyAzi);
 	double angleS, distanceS;
 	angleS = exp(-PI * pow((angleDiff / 30.0),2));
@@ -616,13 +616,13 @@ double FuncCommon::detectScore(const Point &mine,const Point &enemy) {
 	return 0.5*angleS + 0.5*distanceS;
 }
 
-double FuncCommon::encapsulationTime(Point &mine, Point &enemy) {
+double FuncCommon::EncapsulationTime(Point &mine, Point &enemy) {
 	mine.azimuth = -mine.azimuth + 90;   //ת��Ϊ��ѧ����ϵ
 	enemy.azimuth = -enemy.azimuth + 90; //ת��Ϊ��ѧ����ϵ
-	auto otherPoint = trianglePoint(mine, 70000);
+	auto otherPoint = TrianglePoint(mine, 70000);
 	//cout << "�ж��Ƿ����������ڲ�  " << isInTriangle({ mine.x,mine.y }, otherPoint[0], otherPoint[1], { enemy.x,enemy.y }) << endl;
-	if (isInTriangle({ mine.x,mine.y }, otherPoint[0], otherPoint[1], { enemy.x,enemy.y }))
-		return detectTime(mine, enemy, otherPoint[0], otherPoint[1]);
+	if (IsInTriangle({ mine.x,mine.y }, otherPoint[0], otherPoint[1], { enemy.x,enemy.y }))
+		return DetectTime(mine, enemy, otherPoint[0], otherPoint[1]);
 	return 0;
 }
 

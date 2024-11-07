@@ -30,7 +30,9 @@ struct Point {
         : x(_x), y(_y), z(_z), azimuth(_azimuth), v(_v) {}
 	Point(int _planeID, double _x, double _y, double _z, double _azimuth, double _v) 
         : planeID(_planeID), x(_x), y(_y), z(_z), azimuth(_azimuth), v(_v) {}
-	Point(double _x, double _y, double _z, double _azimuth, double _v, double _pitch)
+	// Point(double _x, double _y, double _z, double _azimuth, double _v, double _pitch)
+    //     : x(_x), y(_y), z(_z), azimuth(_azimuth), v(_v), pitch(_pitch) {}
+	Point(double _x, double _y, double _z, double _azimuth, double _pitch, double _v)
         : x(_x), y(_y), z(_z), azimuth(_azimuth), v(_v), pitch(_pitch) {}
 	Point(double _x, double _y, double _z, double _azimuth, double _v, float _V_cmd, float _H_cmd, float _A_cmd)
         : x(_x), y(_y), z(_z), azimuth(_azimuth), v(_v), V_cmd(_V_cmd), H_cmd(_H_cmd), A_cmd(_A_cmd) {}
